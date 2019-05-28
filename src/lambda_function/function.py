@@ -85,7 +85,7 @@ def _put_metric_alarm(metric, period, bound, threshhold):
   logger.info('Putting alarm {}'.format(alarm_name))
   response = CLOUDWATCH.put_metric_alarm(
     AlarmName=alarm_name,
-    AlarmDescription='{} Standard Deviation {} metric for {}/{}, dimensions {}'.format(
+    AlarmDescription='{} {} Standard Deviations metric for {}/{}, dimensions {}'.format(
       bound, 
       NUM_STANDARD_DEVIATION, 
       metric['Namespace'], 
