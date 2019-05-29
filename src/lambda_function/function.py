@@ -99,7 +99,7 @@ def _put_metric_alarm(metric, period, bound, threshhold):
     Namespace=metric['Namespace'],
     Statistic=METRIC_STAT,
     Dimensions=metric['Dimensions'],
-    Period=ALARM_PERIOD,
+    Period=period,
     Unit=METRIC_UNIT,
     EvaluationPeriods=ALARM_EVALUATION_PERIODS,
     DatapointsToAlarm=ALARM_DATAPOINTS_TO_ALARM,
