@@ -77,12 +77,12 @@ Environment Variables
 
 **METRIC_NAMESPACE** (Required)
 
-  The namespace for the metric associated specified in ``METRIC_NAMESPACE`` .
+  The namespace for the metric associated with the alarm.
 
 **METRIC_SAMPLE_DAYS** (Optional)
 
   The number of days to use to calculate the mean and population standard
-  deviation from. Must be less than ``455``.
+  deviation from. Must be less than ``455``. Defaults to ``15``.
 
 **METRIC_STAT** (Required)
 
@@ -113,7 +113,7 @@ Environment Variables
   so this multiplied by ``EVALUATION_PERIODS`` cannot be more than 86,400
   seconds.
 
-  The actual period used may be changed by ``MAX_SAMPLE_DAYS`` as CloudWatch
+  The actual period used may be changed by ``METRIC_SAMPLE_DAYS`` as CloudWatch
   places certain requirements of period length when retrieving metric data.
 
 License: `APL2`_
