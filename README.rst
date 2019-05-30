@@ -82,7 +82,7 @@ Environment Variables
 **METRIC_SAMPLE_DAYS** (Optional)
 
   The number of days to use to calculate the mean and population standard
-  deviation from. Must be less than ``455``.
+  deviation from. Must be less than ``455``. Defaults to ``15``.
 
 **METRIC_STAT** (Required)
 
