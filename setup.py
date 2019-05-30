@@ -1,7 +1,7 @@
 from setuptools import setup, find_packages
 
 
-lambda_name = 'cloudwatch-stdev-alert-calculator'
+lambda_name = 'cloudwatch-stdev-alarm-creator'
 
 # Versions should comply with PEP440.  For a discussion on single-sourcing
 # the version across setup.py and the project code, see
