@@ -113,7 +113,7 @@ Environment Variables
   so this multiplied by ``EVALUATION_PERIODS`` cannot be more than 86,400
   seconds.
 
-  The actual period used may be changed by ``MAX_SAMPLE_DAYS`` as CloudWatch
+  The actual period used may be changed by ``METRIC_SAMPLE_DAYS`` as CloudWatch
   places certain requirements of period length when retrieving metric data.
 
 License: `APL2`_
