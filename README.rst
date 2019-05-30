@@ -77,7 +77,7 @@ Environment Variables
 
 **METRIC_NAMESPACE** (Required)
 
-  The namespace for the metric associated specified in ``METRIC_NAMESPACE`` .
+  The namespace for the metric associated with the alarm.
 
 **METRIC_SAMPLE_DAYS** (Optional)
 
