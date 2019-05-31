@@ -33,6 +33,11 @@ Environment Variables
   any other state. Each action is specified as an Amazon Resource Name (ARN),
   seperated by commas.
 
+**ALARM_NAME** (Optional)
+  If present, the name of the alarm will be
+  ``<ALARM_NAME>/<Dimensions>-<Bound>```. Otherwise, the name will be
+  ``<METRIC_NAMESPACE>/<METRIC_NAME>/<Dimensions>-<Bound>``
+
 **BOUNDS** (Optional)
 
   The type of alarm threshold(s) to set. Either ``AlarmHigh``, ``AlarmLow`` or

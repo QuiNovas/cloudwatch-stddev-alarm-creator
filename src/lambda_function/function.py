@@ -9,6 +9,7 @@ from statistics import mean, pstdev
 
 
 ALARM_ACTIONS = [ x.strip() for x in environ.get('ALARM_ACTIONS', '').split(',') if x ]
+ALARM_NAME = environ.get('ALARM_NAME')
 BOUNDS = environ.get('BOUNDS', 'Both')
 CLOUDWATCH = boto3.client('cloudwatch')
 DATAPOINTS_TO_ALARM = int(environ['DATAPOINTS_TO_ALARM'])
@@ -61,13 +62,18 @@ def handler(event, context):
 
 
 def _create_alarm_name(metric, bound):
-  return 'stddev{}-{}-{}/{}/{}'.format(
-      NUM_STANDARD_DEVIATION, 
-      bound, 
-      metric['Namespace'], 
-      metric['MetricName'], 
-      '/'.join([ x['Value'] for x in sorted(metric['Dimensions'], key=lambda x: x['Name']) ])
-    )
+  dimensions_string = '/'.join([ x['Value'] for x in sorted(metric.get('Dimensions', []), key=lambda x: x['Name']) ])
+  if not ALARM_NAME:
+    if dimensions_string:
+      name = '{}/{}/{}-{}'.format(metric['Namespace'], metric['MetricName'], dimensions_string, bound)
+    else:
+      name = '{}/{}-{}'.format(metric['Namespace'], metric['MetricName'], bound)
+  else:
+    if dimensions_string:
+      name = '{}/{}-{}'.format(ALARM_NAME, dimensions_string, bound)
+    else:
+      name = '{}-{}'.format(ALARM_NAME, bound)
+  return name
 
 
 def _delete_metric_alarm(metric, bound):
