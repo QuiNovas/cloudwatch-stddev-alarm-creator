@@ -96,7 +96,7 @@ def _put_metric_alarm(metric, period, bound, threshhold):
       NUM_STANDARD_DEVIATION, 
       metric['Namespace'], 
       metric['MetricName'], 
-      json.dumps(metric['Dimensions'], separators=(',', ':'))
+      json.dumps(metric.get('Dimensions',[]), separators=(',', ':'))
     ),
     OKActions=OK_ACTIONS,
     AlarmActions=ALARM_ACTIONS,
@@ -104,7 +104,7 @@ def _put_metric_alarm(metric, period, bound, threshhold):
     MetricName=metric['MetricName'],
     Namespace=metric['Namespace'],
     Statistic=METRIC_STAT,
-    Dimensions=metric['Dimensions'],
+    Dimensions=metric.get('Dimensions', []),
     Period=period,
     Unit=METRIC_UNIT,
     EvaluationPeriods=EVALUATION_PERIODS,
@@ -133,7 +133,7 @@ def _get_metrics():
   metrics = _list_metrics()
   return metrics \
     if not len(METRIC_DIMENSIONS) \
-      else [ metric for metric in metrics if _do_dimensions_match(metric['Dimensions']) ]
+      else [ metric for metric in metrics if _do_dimensions_match(metric.get('Dimensions', [])) ]
 
 
 def _do_dimensions_match(dimensions):
