@@ -121,4 +121,8 @@ Environment Variables
   The actual period used may be changed by ``METRIC_SAMPLE_DAYS`` as CloudWatch
   places certain requirements of period length when retrieving metric data.
 
+**TREAT_MISSING_DATA** (Optional)
+  Sets how this alarm is to handle missing data points. One of ``breaching``,
+  ``notBreaching``, ``ignore`` or ``missing``. Defaults to ``missing``.
+
 License: `APL2`_
