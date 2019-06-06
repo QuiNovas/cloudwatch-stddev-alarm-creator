@@ -39,26 +39,24 @@ def handler(event, context):
     if metric_data:
       data_mean = mean(metric_data)
       data_pstdev = pstdev(metric_data)
-      high_threshold = data_mean + (data_pstdev * NUM_STANDARD_DEVIATION)
-      low_threshold = data_mean - (data_pstdev * NUM_STANDARD_DEVIATION)
-      logger.info('Mean: {}; Stddev: {}; High: {}; Low: {}'.format(data_mean, data_pstdev, high_threshold, low_threshold))
-      if BOUNDS == 'Both':
-        _put_metric_alarm(metric, period, 'AlarmHigh', high_threshold)
-        if low_threshold > 0.0:
-          _put_metric_alarm(metric, period, 'AlarmLow', low_threshold)
-        else:
-          _delete_metric_alarm(metric, 'AlarmLow')
-      elif BOUNDS == 'AlarmHigh':
-        _put_metric_alarm(metric, period, 'AlarmHigh', high_threshold)
-        _delete_metric_alarm(metric, 'AlarmLow')
-      elif BOUNDS == 'AlarmLow':
-        if low_threshold > 0.0:
-          _put_metric_alarm(metric, period, 'AlarmLow', low_threshold)
-        else:
-          _delete_metric_alarm(metric, 'AlarmLow')
+      if not data_pstdev:
         _delete_metric_alarm(metric, 'AlarmHigh')
+        _delete_metric_alarm(metric, 'AlarmLow')
       else:
-        raise ValueError('ALARM_BOUNDS {} unrecognized, must be one of AlarmHigh, AlarmLow, or Both'.format(BOUNDS))
+        high_threshold = data_mean + (data_pstdev * NUM_STANDARD_DEVIATION)
+        low_threshold = data_mean - (data_pstdev * NUM_STANDARD_DEVIATION)
+        logger.info('Mean: {}; Stddev: {}; High: {}; Low: {}'.format(data_mean, data_pstdev, high_threshold, low_threshold))
+        if BOUNDS == 'Both':
+          _put_metric_alarm(metric, period, 'AlarmHigh', high_threshold)
+          _put_metric_alarm(metric, period, 'AlarmLow', max(low_threshold, 0.0))
+        elif BOUNDS == 'AlarmHigh':
+          _put_metric_alarm(metric, period, 'AlarmHigh', high_threshold)
+          _delete_metric_alarm(metric, 'AlarmLow')
+        elif BOUNDS == 'AlarmLow':
+          _put_metric_alarm(metric, period, 'AlarmLow', max(low_threshold, 0.0))
+          _delete_metric_alarm(metric, 'AlarmHigh')
+        else:
+          raise ValueError('ALARM_BOUNDS {} unrecognized, must be one of AlarmHigh, AlarmLow, or Both'.format(BOUNDS))
   return event
 
 
@@ -111,7 +109,7 @@ def _put_metric_alarm(metric, period, bound, threshhold):
     EvaluationPeriods=EVALUATION_PERIODS,
     DatapointsToAlarm=DATAPOINTS_TO_ALARM,
     Threshold=threshhold,
-    ComparisonOperator='GreaterThanThreshold' if bound == 'AlarmHigh' else 'LessThanThreshold',
+    ComparisonOperator='GreaterThanThreshold' if bound == 'AlarmHigh' else 'LessThanThreshold' if threshhold > 0.0 else 'LessThanOrEqualToThreshold',
     TreatMissingData=TREAT_MISSING_DATA
   )
 
