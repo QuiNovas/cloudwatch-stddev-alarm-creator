@@ -24,6 +24,7 @@ METRIC_UNIT = environ['METRIC_UNIT']
 NUM_STANDARD_DEVIATION = int(environ.get('NUM_STANDARD_DEVIATION', '3'))
 OK_ACTIONS = [ x.strip() for x in environ.get('OK_ACTIONS', '').split(',') if x ]
 PERIOD = int(environ['PERIOD'])
+TREAT_MISSING_DATA = environ.get('TREAT_MISSING_DATA', 'missing')
 
 logger = logging.getLogger()
 logger.setLevel(logging.INFO)
@@ -110,7 +111,8 @@ def _put_metric_alarm(metric, period, bound, threshhold):
     EvaluationPeriods=EVALUATION_PERIODS,
     DatapointsToAlarm=DATAPOINTS_TO_ALARM,
     Threshold=threshhold,
-    ComparisonOperator='GreaterThanThreshold' if bound == 'AlarmHigh' else 'LessThanThreshold'
+    ComparisonOperator='GreaterThanThreshold' if bound == 'AlarmHigh' else 'LessThanThreshold',
+    TreatMissingData=TREAT_MISSING_DATA
   )
 
 
